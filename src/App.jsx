@@ -1,9 +1,18 @@
+import Start from "./pages/Start";
+import Quiz from "./pages/Quiz";
+import ImgBg from "./components/ImgBg";
+import { useState } from "react";
+
 export default function App() {
+  const [isStarted, setIsStarted] = useState(true);
+  function startQuiz() {
+    setIsStarted(true);
+  }
   return (
-    <div>
-      <h1 className="text-3xl font-bold text-red-600">
-        Hello Vite & React & TailwindCSS
-      </h1>
-    </div>
+    <main>
+      <ImgBg />
+      {/* <Quiz /> */}
+      {isStarted ? <Quiz /> : <Start startQuiz={startQuiz} />}
+    </main>
   );
 }
