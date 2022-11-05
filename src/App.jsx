@@ -11,8 +11,8 @@ export default function App() {
   return (
     <main>
       <ImgBg />
-      {/* <Quiz /> */}
-      {isStarted ? <Quiz /> : <Start startQuiz={startQuiz} />}
+      <Quiz />
+      {/* {isStarted ? <Quiz /> : <Start startQuiz={startQuiz} />} */}
     </main>
   );
 }
