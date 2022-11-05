@@ -6,13 +6,14 @@ import axios from "axios";
 import Choices from "../components/Choices";
 
 export default function Quiz() {
-  function getRandomNumber(max) {
-    return Math.floor(Math.random() * max);
-  }
   const questionsNumber = 5;
   const [quizData, setQuizData] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
   const [score, setScore] = useState(0);
+  const [playAgain, setPlayAgain] = useState(false);
+  function getRandomNumber(max) {
+    return Math.floor(Math.random() * max);
+  }
   useEffect(() => {
     axios
       .get(
@@ -37,7 +38,8 @@ export default function Quiz() {
           return {
             id: nanoid(),
             question: ele.question,
-            choices: choices,
+            choices: [...choices],
+            isAnswered: false,
           };
         });
 
@@ -47,7 +49,7 @@ export default function Quiz() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [playAgain]);
   function chooseAnswer(id, choice) {
     // const newQuizData = [];
     // for (let i = 0; i < questionsNumber; i++) {
@@ -98,7 +100,7 @@ export default function Quiz() {
             }
             return { ...ele, isChosen: false };
           });
-          return { ...ele, choices: [...newChoices] };
+          return { ...ele, choices: [...newChoices], isAnswered: true };
         }
         return { ...ele };
       });
@@ -121,16 +123,37 @@ export default function Quiz() {
       );
     });
   }
+  function allAnswered() {
+    return quizData.every((ele) => {
+      return ele.isAnswered;
+    });
+    // for (let i = 0; i < quizData.length; i++) {
+    //   if (!quizData[i].isAnswered) {
+    //     return false;
+    //   }
+    // }
+    // return true;
+  }
   function checkAnswers() {
+    // if (!allAnswered()) {
+    //   alert("Please Answer All Question");
+    //   return false;
+    // }
     quizData.forEach((ele) => {
       ele.choices.forEach((ele) => {
-        ele.isCorrect && ele.isChosen
+        ele.isChosen && ele.isCorrect
           ? setScore((prevScore) => prevScore + 1)
-          : score;
+          : setScore((prevScore) => prevScore);
       });
     });
-    console.log(`${score}/5`);
     setIsChecked(true);
+  }
+  function runPlayAgain() {
+    setPlayAgain((prevState) => {
+      return !prevState;
+    });
+    setIsChecked(false);
+    setScore(0);
   }
   return (
     <div className=" px-20 py-10">
@@ -141,7 +164,10 @@ export default function Quiz() {
           <span className=" font-inter text-xs font-bold">
             {`You scored ${score}/5 correct answers`}
           </span>
-          <button className="mx-auto h-9 w-32 rounded-xl bg-btnClr font-inter text-xxs font-semibold text-bgClr shadow-md transition duration-300 hover:brightness-110">
+          <button
+            className="mx-auto h-9 w-32 rounded-xl bg-btnClr font-inter text-xxs font-semibold text-bgClr shadow-md transition duration-300 hover:brightness-110"
+            onClick={runPlayAgain}
+          >
             Play again
           </button>
         </div>
@@ -153,12 +179,6 @@ export default function Quiz() {
           Check answers
         </button>
       )}
-      {/* <button
-        className="mx-auto block h-9 w-32 rounded-xl bg-btnClr font-inter text-xxs font-semibold text-bgClr shadow-md transition duration-300 hover:brightness-110"
-        onClick={checkAnswers}
-      >
-        Check answers
-      </button> */}
     </div>
   );
 }

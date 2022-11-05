@@ -4,15 +4,15 @@ import ImgBg from "./components/ImgBg";
 import { useState } from "react";
 
 export default function App() {
-  const [isStarted, setIsStarted] = useState(true);
+  const [isStarted, setIsStarted] = useState(false);
   function startQuiz() {
     setIsStarted(true);
   }
   return (
     <main>
       <ImgBg />
-      <Quiz />
-      {/* {isStarted ? <Quiz /> : <Start startQuiz={startQuiz} />} */}
+      {/* <Quiz /> */}
+      {isStarted ? <Quiz /> : <Start startQuiz={startQuiz} />}
     </main>
   );
 }
