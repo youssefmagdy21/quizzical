@@ -4,13 +4,24 @@ import { nanoid } from "nanoid";
 export default function Choices(props) {
   const choicesArr = props.choices.map((ele) => {
     return (
-      <div
+      <button
         key={nanoid()}
         onClick={() => {
           props.handleClick(props.id, ele.choice);
         }}
+        disabled={props.isChecked}
         className={`
-        ${ele.isChosen ? "border-none bg-chooseClr" : "border bg-transparent"}
+        ${
+          !props.isChecked && !ele.isChosen
+            ? "border bg-transparent opacity-100"
+            : !props.isChecked && ele.isChosen
+            ? "border-none bg-chooseClr opacity-100"
+            : props.isChecked && ele.isChosen && !ele.isCorrect
+            ? "border-none bg-wrongAnswer opacity-50"
+            : props.isChecked && ele.isCorrect
+            ? "border-none bg-correctAnswer opacity-100"
+            : "border bg-transparent opacity-50"
+        }
       min-w-[4rem] cursor-default
       rounded-lg
       border-btnClr
@@ -23,7 +34,7 @@ export default function Choices(props) {
       >
         {/* {ele.choice} */}
         {parse(ele.choice)}
-      </div>
+      </button>
     );
   });
   return choicesArr;

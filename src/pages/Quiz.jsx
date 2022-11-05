@@ -12,6 +12,7 @@ export default function Quiz() {
   const questionsNumber = 5;
   const [quizData, setQuizData] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
+  const [score, setScore] = useState(0);
   useEffect(() => {
     axios
       .get(
@@ -113,6 +114,7 @@ export default function Quiz() {
               choices={ele.choices}
               id={ele.id}
               handleClick={chooseAnswer}
+              isChecked={isChecked}
             />
           </div>
         </div>
@@ -120,10 +122,11 @@ export default function Quiz() {
     });
   }
   function checkAnswers() {
-    let score = 0;
     quizData.forEach((ele) => {
       ele.choices.forEach((ele) => {
-        ele.isCorrect && ele.isChosen ? score++ : (score = score);
+        ele.isCorrect && ele.isChosen
+          ? setScore((prevScore) => prevScore + 1)
+          : score;
       });
     });
     console.log(`${score}/5`);
@@ -134,9 +137,14 @@ export default function Quiz() {
       {displayQuizData()}
       {/* {console.log(quizData)} */}
       {isChecked ? (
-        <button className="mx-auto block h-9 w-32 rounded-xl bg-btnClr font-inter text-xxs font-semibold text-bgClr shadow-md transition duration-300 hover:brightness-110">
-          Play again
-        </button>
+        <div className=" mx-auto flex w-96 items-center justify-center gap-2">
+          <span className=" font-inter text-xs font-bold">
+            {`You scored ${score}/5 correct answers`}
+          </span>
+          <button className="mx-auto h-9 w-32 rounded-xl bg-btnClr font-inter text-xxs font-semibold text-bgClr shadow-md transition duration-300 hover:brightness-110">
+            Play again
+          </button>
+        </div>
       ) : (
         <button
           className="mx-auto block h-9 w-32 rounded-xl bg-btnClr font-inter text-xxs font-semibold text-bgClr shadow-md transition duration-300 hover:brightness-110"
