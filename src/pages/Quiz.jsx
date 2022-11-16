@@ -1,4 +1,3 @@
-import Question from "../components/Question";
 import parse from "html-react-parser";
 import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
@@ -44,7 +43,6 @@ export default function Quiz() {
         });
 
         setQuizData(quiz);
-        console.log(quiz);
       })
       .catch((err) => {
         console.log(err);
@@ -123,17 +121,17 @@ export default function Quiz() {
       );
     });
   }
-  function allAnswered() {
-    return quizData.every((ele) => {
-      return ele.isAnswered;
-    });
-    // for (let i = 0; i < quizData.length; i++) {
-    //   if (!quizData[i].isAnswered) {
-    //     return false;
-    //   }
-    // }
-    // return true;
-  }
+  // function allAnswered() {
+  //   return quizData.every((ele) => {
+  //     return ele.isAnswered;
+  //   });
+  //   // for (let i = 0; i < quizData.length; i++) {
+  //   //   if (!quizData[i].isAnswered) {
+  //   //     return false;
+  //   //   }
+  //   // }
+  //   // return true;
+  // }
   function checkAnswers() {
     // if (!allAnswered()) {
     //   alert("Please Answer All Question");
@@ -158,7 +156,6 @@ export default function Quiz() {
   return (
     <div className=" px-20 py-10">
       {displayQuizData()}
-      {/* {console.log(quizData)} */}
       {isChecked ? (
         <div className=" mx-auto flex w-96 items-center justify-center gap-2">
           <span className=" font-inter text-xs font-bold">
